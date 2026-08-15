@@ -2,8 +2,8 @@
   "name": "roc-lang-unofficial",
   "version": "0.1.1",
   "icon": "resources/roc-logo.png",
-  "displayName": "Roc (Unofficial)",
-  "description": "Roc language support",
+  "displayName": "Roc",
+  "description": "Roc language support (unofficial)",
   "publisher": "IvanDemchenko",
   "pricing": "Free",
   "license": "MIT",
@@ -18,15 +18,23 @@
     "type": "git",
     "url": "https://github.com/ivan-demchenko/roc-vscode-unofficial"
   },
-  "categories": ["Programming Languages"],
+  "categories": [
+    "Programming Languages"
+  ],
   "activationEvents": [],
   "main": "./dist/extension",
   "contributes": {
     "languages": [
       {
         "id": "roc",
-        "aliases": ["Roc", "roc", "roc-lang"],
-        "extensions": [".roc"],
+        "aliases": [
+          "Roc",
+          "roc",
+          "roc-lang"
+        ],
+        "extensions": [
+          ".roc"
+        ],
         "configuration": "./roc-language-configuration.json",
         "icon": {
           "dark": "./resources/roc-logo.png",
@@ -43,28 +51,33 @@
     ],
     "commands": [
       {
-        "command": "roc-lang-unofficial.ls-start",
+        "command": "roc.language-server.start",
         "title": "Start Language Server",
-        "category": "Roc (unofficial)"
+        "category": "Roc"
       },
       {
-        "command": "roc-lang-unofficial.ls-stop",
+        "command": "roc.language-server.stop",
         "title": "Stop Language Server",
-        "category": "Roc (unofficial)"
+        "category": "Roc"
+      },
+      {
+        "command": "roc.language-server.restart",
+        "title": "Restart Language Server",
+        "category": "Roc"
       }
     ],
     "configuration": [
       {
         "type": "object",
-        "title": "roc-lang",
+        "title": "roc",
         "properties": {
-          "roc-lang.language-server.exe": {
+          "roc.language-server.exe": {
             "type": "string",
             "description": "Path to the language server executable"
           },
-          "roc-lang.language-server.debug-exe": {
+          "roc.language-server.debug-exe": {
             "type": "string",
-            "description": "Path to the debug language server executable"
+            "description": "Path to the language server debug executable"
           }
         }
       }
@@ -98,6 +111,7 @@
     "semantic-release-vsce": "^5.7.2",
     "ts-loader": "^9.5.0",
     "ts-results": "^3.3.0",
+    "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4"
@@ -108,6 +122,7 @@
     ]
   },
   "dependencies": {
+    "effect": "^3.5.3",
     "vscode-languageclient": "^9.0.1"
   },
   "packageManager": "pnpm@8.14.1+sha256.2df78e65d433d7693b9d3fbdaf431b2d96bb4f96a2ffecd51a50efe16e50a6a8"

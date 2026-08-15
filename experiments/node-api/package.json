@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "configure:gyp": "node-gyp configure",
+    "build:roc": "roc build libinterop.roc --lib",
+    "build:gyp": "node-gyp build",
+    "copy:typedefs": "cp addon.d.ts build/Release/",
+    "build": "pnpm build:roc && pnpm build:gyp && pnpm copy:typedefs",
+    "dev": "tsx src/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "node-gyp": "^10.2.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3 "
+  }
+}

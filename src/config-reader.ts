@@ -1,13 +1,7 @@
+import { None, Option, Some } from 'ts-results';
 import * as vscode from 'vscode';
-import { Option, Some, None } from 'ts-results';
-
-const CONFIGURATION_HEADER = 'roc-lang';
-const CONFIG_OPTION = {
-  languageServer: {
-    exe: 'language-server.exe',
-    debugExe: 'language-server.debug-exe',
-  },
-} as const;
+import { SETTINGS } from './constants';
+import * as util from './util';
 
 function convertUnknownToString(val: unknown): Option<string> {
   if (typeof val !== 'string' || val === '') {
@@ -16,45 +10,34 @@ function convertUnknownToString(val: unknown): Option<string> {
   return Some(val);
 }
 
-function getStringConfig(key: string): Option<string> {
-  const lsExe = vscode.workspace
-    .getConfiguration(CONFIGURATION_HEADER)
-    .get(key);
-
-  return convertUnknownToString(lsExe);
-}
-
-function getEnvVar(key: string): Option<string> {
-  const val = process.env[key];
-  return convertUnknownToString(val);
-}
-
 function optionOr<T>(opt: Option<T>, fallback: Option<T>): Option<T> {
   if (opt.some) {
     return opt;
   }
-
   return fallback;
 }
 
-export type ModuleAPI = {
-  getExecutablePath(): Option<string>;
-  getDebugExecutablePath(): Option<string>;
-};
+export type Api = ReturnType<typeof api>;
 
-export function activate(): ModuleAPI {
+// Move out process.env and vscode.workspace.getConfiguration() to reinvoke it
+export function api(logger: ReturnType<typeof util.logger>) {
+  const getConfigKey = vscode.workspace.getConfiguration().get;
+  const getEnvKey = util.getEnv(process.env).get;
+  const log = logger;
+
   return {
-    getExecutablePath: () => {
-      return optionOr(
-        getStringConfig(CONFIG_OPTION.languageServer.exe),
-        getEnvVar('ROC_LSP_PATH'),
-      );
-    },
-    getDebugExecutablePath: () => {
-      return optionOr(
-        getStringConfig(CONFIG_OPTION.languageServer.debugExe),
-        getEnvVar('ROC_LSP_DEBUG_PATH'),
-      );
-    },
+    load: () =>
+      util.objectMap(SETTINGS, (key) => {
+        const option = optionOr(
+          convertUnknownToString(getConfigKey(key.config)),
+          convertUnknownToString(getEnvKey(key.env)),
+        );
+        if (option.some) {
+          log.info(`${key.name}: ${option.val}.`);
+        } else {
+          log.warn(`${key.name} was not defined.`);
+        }
+        return option;
+      }),
   };
 }

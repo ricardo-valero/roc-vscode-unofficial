@@ -32,5 +32,6 @@
         "command": ["alejandra"]
       }
     }
-  }
+  },
+  "roc-lang.language-server.exe": "roc_language_server"
 }

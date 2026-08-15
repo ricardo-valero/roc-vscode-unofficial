@@ -1,7 +1,8 @@
-app "hello"
-    packages { pf: "https://github.com" }
-    imports [pf.Stdout]
-    provides main to pf
+app [main] {
+    cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.10.0/vNe6s9hWzoTZtFmNkvEICPErI9ptji_ySjicO6CkucY.tar.br",
+}
+
+import cli.Stdout
 
 ## This is docs
 ## for main.roc file

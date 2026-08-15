@@ -28,8 +28,14 @@
           nil
           corepack
           nodejs-slim
+          bun
+          zig
+          zls
           (with rocPkgs; [full])
         ];
+        shellHook = ''
+          export ROC_LSP_DEBUG_PATH=${rocPkgs.full}/bin/roc_language_server
+        '';
       };
     });
   };
